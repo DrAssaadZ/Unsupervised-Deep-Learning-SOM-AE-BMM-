@@ -1,0 +1,4 @@
+in this simple example i will use the package that i downloaded from internet test SOMs,
+to detect frau, it will be unsupervised learning, so I need to highlight the fraud applications,
+an other application using K-means and ANN can be founf in an other repository
+Dataset: Australian Credit Approval

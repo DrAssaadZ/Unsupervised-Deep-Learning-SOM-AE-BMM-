@@ -24,7 +24,7 @@ X = sc.fit_transform(X)
 # Training the SOM
 from minisom import MiniSom
 
-som = MiniSom(x=10, y=10, input_len=len(X.T))	# x, y are the dimenstions of the grid(map)
+som = MiniSom(x=10, y=10, input_len=len(X.T))	# x, y are the dimenstions of the grid(map), other parametres are available , but we will use the defaukt parameters
 som.random_weights_init(X)
 som.train_random(data=X, num_iteration=100)
 

@@ -33,7 +33,8 @@ nb_users = int(max(max(training_set[:, 0]), max(test_set[:, 0])))
 nb_movies = int(max(max(training_set[:, 1]), max(test_set[:, 1])))
 
 
-# Converting the data into an array with users in lines and movies in columns
+# this function will be used to convert our inputs into matix raws = users, columns = movies, the cells are the ratings
+# the reason: restriction of input type for an RBM
 def convert(data):
     new_data = []
     for user_id in range(1, nb_users + 1):
@@ -44,17 +45,21 @@ def convert(data):
         new_data.append(list(ratings))
     return new_data
 
-# Array with users in lines and movies in columns
-# [user_1, user_2, ..., user_943]
-# [[movie_1_rating] [movie_2_rating] ... [movie_1682_rating]]
+# applying the functions:
 training_set = convert(training_set)
 test_set = convert(test_set)
+
+
+
+# start of pytorch section:
+
 
 # Converting the data into Torch tensors
 training_set = torch.FloatTensor(training_set)
 test_set = torch.FloatTensor(test_set)
 
-# Converting the ratings into binary ratings 1 (Liked) or 0 (Not Liked)
+# Converting the ratings into binary ratings 1 (Liked) or 0 (Not Liked) -1 not rated, selection is from the original dataset
+# the next selection code is selection based on the cells content
 training_set[training_set == 0] = -1
 training_set[training_set == 1] = 0
 training_set[training_set == 2] = 0
@@ -65,12 +70,13 @@ test_set[test_set == 2] = 0
 test_set[test_set >= 3] = 1
 
 
-# Creating the architecture of the Neural Network
+# Creating the architecture of the Neural Network, first use of classes in creation of NN:
+# RBMs are Probabilistic Graphical Model
 class RBM:
     def __init__(self, n_visible_nodes, n_hidden_nodes):
-        self.W = torch.randn(n_hidden_nodes, n_visible_nodes)
-        self.a = torch.randn(1, n_hidden_nodes)
-        self.b = torch.randn(1, n_visible_nodes)
+        self.W = torch.randn(n_hidden_nodes, n_visible_nodes)       #weights
+        self.a = torch.randn(1, n_hidden_nodes)                     #biases
+        self.b = torch.randn(1, n_visible_nodes)                    #biases
 
     def sample_h(self, x):
         """
